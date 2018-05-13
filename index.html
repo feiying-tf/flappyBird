@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #cvs {
+            border: solid 1px #333;
+        }
+    </style>
+</head>
+<body>
+<canvas id="cvs"></canvas>
+</body>
+</html>
+
+<script src="js/loadImage.js"></script>
+<script src = 'js/sky.js'></script>
+<script src = 'js/land.js'></script>
+<script src = 'js/pipe.js'></script>
+<script src = 'js/bird.js'></script>
+<script src = 'js/gameScene.js'></script>
+<script src = 'js/overScene.js'></script>
+
+<script>
+
+
+</script>
+<script>
+    var cvs = document.getElementById("cvs");
+    var ctx = cvs.getContext("2d");
+    var timer = null;
+
+    until.loadImage({
+        bird : "images/bird.png",
+        land : "images/land.png",
+        pipeDown : "images/pipeDown.png",
+        pipeUp : "images/pipeUp.png",
+        sky : "images/sky.png"
+    }, function (imgObj) {
+        //将画布大小设置成背景图片大小
+        cvs.width = imgObj.sky.width;
+        cvs.height = imgObj.sky.height;
+
+
+        var gameSceneObj = getGameScence(ctx, imgObj);
+        var overSceneObj = getOverScence(ctx);
+
+        var time = 0;
+        var setTime = 50;
+
+        //监听者模式第三步，添加听众
+        gameSceneObj.listeners.push(function (time, setTime) {
+            clearInterval(timer);
+            overSceneObj.draw(time, setTime);
+        });
+
+
+        timer = setInterval(function(){
+            time++;
+            //将游戏结束要显示的值进行传递；
+            gameSceneObj.draw(time, setTime);
+        },setTime);
+    })
+</script>
